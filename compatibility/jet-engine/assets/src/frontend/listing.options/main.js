@@ -20,9 +20,25 @@ function isSupported( input ) {
 	return false;
 }
 
+function shouldPreventProgression( element ) {
+	let checkElement = element;
+	while ( checkElement ) {
+		if ( checkElement.dataset && checkElement.dataset.preventProgression === 'true' ) {
+			return true;
+		}
+		checkElement = checkElement.parentElement;
+	}
+	return false;
+}
+
 function ListingTemplateClick( { pointerId, target } ) {
 	// prevent recursive call by .click()
 	if ( -1 === pointerId ) {
+		return;
+	}
+
+	// Check if progression should be prevented
+	if ( shouldPreventProgression( target ) ) {
 		return;
 	}
 
